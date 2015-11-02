@@ -5,6 +5,9 @@ import Backbone from 'backbone';
 import parse from './parse_auth';
 import {TodoCollection} from './resources';
 import {TodoView} from './views';
+import React from 'react';
+import ReactDom from 'react-dom';
+import TodoList from './react/todo_list';
 
 $.ajaxSetup({
   headers: {
@@ -14,12 +17,16 @@ $.ajaxSetup({
 });
 
 let todos = new TodoCollection();
+todos.fetch().then(()=>{
+  let x= todos.toJSON();
+  _.each(x, function(y){
+  ReactDom.render(<TodoList displayData={y.objectId}/>, document.querySelector('.wrapper'))
+})
+})
 
-todos.fetch().then(function() {
-  
-  $('.wrapper').html(new TodoView(todos).render().$el);
+   
 
-});
+
 
 
 console.log('Hello, World');

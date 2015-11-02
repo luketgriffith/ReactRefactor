@@ -1,6 +1,6 @@
-const APP_ID = 'mmoMgOQzCeRE8Ad4vmRkHMLYyTwEPPrAGXMEfDFm';
-const API_KEY = 'xvocUSdI55mrUV7m7fb0ylyXO2kQ6EML2mlBDEoY';
-const APP_URL = 'https://api.parse.com/1/classes/Todo';
+const APP_ID = 'qCOqDGyWpUknjfrmyJBV8lJSmofDu0DqgiPamelo';
+const API_KEY = 'ybBHV8obxOCqKnUDzYMhUGtIiZpcYsCTqQnBPeAc';
+const APP_URL = 'https://api.parse.com/1/classes/todos';
 
 export default {
   APP_ID,
