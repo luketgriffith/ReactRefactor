@@ -6,9 +6,7 @@ body {
   font-family: 'Slabo 27px', serif;
 }
 
-.hey{
-  background-color: red;
-}
+
 ul{
   list-style: none;
   h1 {
@@ -42,7 +40,10 @@ input {
     color: #456;
     border: none;
   }
-
+.hey{
+  background-color: red;
+  text-decoration: line-through;
+}
 //   button {
 //     width: 40px;
 //     float: left;

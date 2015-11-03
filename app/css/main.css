@@ -2022,9 +2022,6 @@ body {
   background: #e2ebf3;
   font-family: 'Slabo 27px', serif; }
 
-.hey {
-  background-color: red; }
-
 ul {
   list-style: none; }
   ul h1 {
@@ -2054,5 +2051,9 @@ input {
   display: inline-block;
   color: #456;
   border: none; }
+
+.hey {
+  background-color: red;
+  text-decoration: line-through; }
 
 /*# sourceMappingURL=main.css.map */

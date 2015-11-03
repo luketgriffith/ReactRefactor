@@ -155,7 +155,9 @@ exports['default'] = _react2['default'].createClass({
         title: newTitle
       });
       NewTodo.save();
-      location.reload(true);
+      todos.fetch().then(function () {
+        location.reload(true);
+      });
     });
   },
   completeTask: function completeTask(x, y) {
@@ -164,13 +166,36 @@ exports['default'] = _react2['default'].createClass({
       var now = (0, _moment2['default'])().toString();
       var CompletedTodo = new _resourcesNew_model2['default']({
         objectId: x,
-        title: y + ' --finished!',
         completeAt: now
       });
-
       CompletedTodo.save();
+      console.log('allstar');
+      var wat = document.getElementById(x);
+      wat.className = wat.className + " hey";
       todos.fetch().then(function () {
-        location.reload(true);
+        if (todos.toJSON().find(function (item) {
+          return item.completeAt;
+        })) {
+          var _CompletedTodo = new _resourcesNew_model2['default']({
+            objectId: x,
+            completeAt: ''
+          });
+          _CompletedTodo.save();
+          console.log('hey');
+          var _wat = document.getElementById(x);
+          _wat.className = _wat.className;
+        } else {
+
+          console.log('now');
+          var now = (0, _moment2['default'])().toString();
+          var _CompletedTodo2 = new _resourcesNew_model2['default']({
+            objectId: x,
+            completeAt: now
+          });
+          _CompletedTodo2.save();
+          var _wat2 = document.getElementById(x);
+          _wat2.className = _wat2.className + " hey";
+        }
       });
     });
   },
@@ -180,7 +205,7 @@ exports['default'] = _react2['default'].createClass({
 
     return _react2['default'].createElement(
       'div',
-      { key: item.objectId, className: 'todoItems', id: '{item.objectId}' },
+      { key: item.objectId, className: 'todoItems', id: item.objectId },
       _react2['default'].createElement(
         'h1',
         null,

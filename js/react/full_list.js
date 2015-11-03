@@ -39,8 +39,10 @@ export default React.createClass({
               title: newTitle
           });
               NewTodo.save();
-              location.reload(true);
-        })
+              todos.fetch().then(()=>{
+              location.reload(true);        
+            })
+            })
 },
 completeTask(x, y){
     let todos = new TodoCollection();
@@ -48,22 +50,42 @@ completeTask(x, y){
       var now = moment().toString();
          let CompletedTodo = new TodoModel({
             objectId: x,
-            title: y+ ' --finished!',
             completeAt: now
          });
-         
          CompletedTodo.save();
-         todos.fetch().then(()=>{
-         location.reload(true);
-         })
+          console.log('allstar');
+    let wat= document.getElementById(x);
+    wat.className= wat.className + " hey";
+      todos.fetch().then(()=>{
+      if(todos.toJSON().find(item=>item.completeAt)){
+          let CompletedTodo = new TodoModel({
+            objectId: x,
+            completeAt:''
+         });
+         CompletedTodo.save();
+         console.log('hey');
+            let wat= document.getElementById(x);
+            wat.className= wat.className;
+        } else{ 
 
-      });
+        console.log('now');
+        var now = moment().toString();
+         let CompletedTodo = new TodoModel({
+            objectId: x,
+            completeAt: now
+         });
+          CompletedTodo.save();
+            let wat= document.getElementById(x);
+            wat.className= wat.className + " hey";
+          }
+      })
+      })
       
   },
 
 processData(item){
   
-  return <div key={item.objectId} className='todoItems' id='{item.objectId}'>
+  return <div key={item.objectId} className='todoItems' id={item.objectId}>
             <h1>{item.title}</h1><button onClick={()=>this.completeTask(item.objectId, item.title)}>Done</button>
          </div>   
 
