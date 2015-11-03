@@ -8,6 +8,7 @@ import {TodoView} from './views';
 import React from 'react';
 import ReactDom from 'react-dom';
 import TodoList from './react/todo_list';
+import FullList from './react/full_list';
 
 $.ajaxSetup({
   headers: {
@@ -15,16 +16,21 @@ $.ajaxSetup({
     'X-Parse-REST-API-Key': parse.API_KEY
   }
 });
-
 let todos = new TodoCollection();
-todos.fetch().then(()=>{
-  let x= todos.toJSON();
-  _.each(x, function(y){
-  ReactDom.render(<TodoList displayData={y.objectId}/>, document.querySelector('.wrapper'))
-})
-})
+     todos.fetch().then(()=>{
+         let x= todos.toJSON();
+            _.each(x, function(y){
+                ReactDom.render(<FullList 
+                  getTitle={y.title} 
+                  getId={y.objectId}/>, 
+                  document.querySelector('.wrapper'));
+              });
+          }); 
 
-   
+
+
+
+
 
 
 

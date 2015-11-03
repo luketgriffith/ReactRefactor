@@ -1,5 +1,5 @@
 import Backbone from 'backbone';
-import TodoModel from './todo_model';
+import TodoModel from './new_model';
 import {APP_URL} from '../parse_auth';
 
 const TodoCollection = Backbone.Collection.extend({
