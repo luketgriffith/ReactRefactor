@@ -49,6 +49,7 @@ _jquery2['default'].ajaxSetup({
     'X-Parse-REST-API-Key': _parse_auth2['default'].API_KEY
   }
 });
+
 var todos = new _resources.TodoCollection();
 todos.fetch().then(function () {
   var x = todos.toJSON();
@@ -141,6 +142,9 @@ exports['default'] = _react2['default'].createClass({
       message: newMessage
     });
   },
+  wasClicked: function wasClicked(event) {
+    event.target.value = '';
+  },
 
   addTodo: function addTodo() {
     var newTitle = document.querySelector('.newTodo').value;
@@ -156,20 +160,24 @@ exports['default'] = _react2['default'].createClass({
   completeTask: function completeTask(x) {
     var todos = new _resources.TodoCollection();
     todos.fetch().then(function () {
+
       var CompletedTodo = new _resourcesNew_model2['default']({
         objectId: x
       });
-      console.log(CompletedTodo);
+
       CompletedTodo.destroy();
+      todos.fetch().then(function () {
+        location.reload(true);
+      });
     });
   },
 
-  processData: function processData(item, wat) {
+  processData: function processData(item) {
     var _this = this;
 
     return _react2['default'].createElement(
       'div',
-      { key: wat },
+      { key: item.objectId, className: 'todoItems' },
       _react2['default'].createElement(
         'h1',
         null,
@@ -188,20 +196,15 @@ exports['default'] = _react2['default'].createClass({
   render: function render() {
     return _react2['default'].createElement(
       'ul',
-      null,
+      { className: 'todoList' },
       _react2['default'].createElement('input', { type: 'text', onChange: this.updateMessage,
-        className: 'newTodo', value: this.state.message }),
+        className: 'newTodo', value: this.state.message, onClick: this.wasClicked }),
       _react2['default'].createElement(
         'button',
         { onClick: this.addTodo },
         'Add'
       ),
-      _react2['default'].createElement(_todo_list2['default'], { hamster: this.props.scrub.map(this.processData) }),
-      _react2['default'].createElement(
-        'h1',
-        null,
-        'Hey'
-      )
+      _react2['default'].createElement(_todo_list2['default'], { hamster: this.props.scrub.map(this.processData) })
     );
   }
 });

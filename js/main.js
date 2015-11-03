@@ -16,6 +16,7 @@ $.ajaxSetup({
     'X-Parse-REST-API-Key': parse.API_KEY
   }
 });
+
 let todos = new TodoCollection();
      todos.fetch().then(()=>{
          let x= todos.toJSON();
@@ -23,7 +24,7 @@ let todos = new TodoCollection();
                   scrub={x} />, 
                   document.querySelector('.wrapper'));
               });
-        
+       
 
 
 

@@ -27,6 +27,9 @@ export default React.createClass({
       message: newMessage,
     });
   },
+  wasClicked(event){
+    event.target.value= '';
+  },
 
   addTodo(){
     let newTitle = document.querySelector('.newTodo').value;
@@ -42,17 +45,22 @@ export default React.createClass({
 completeTask(x){
     let todos = new TodoCollection();
     todos.fetch().then(()=>{
+      
          let CompletedTodo = new TodoModel({
             objectId: x
          });
-         console.log(CompletedTodo);
+         
          CompletedTodo.destroy();
+         todos.fetch().then(()=>{
+          location.reload(true);
+         })
+
       });
       
   },
 
-processData(item, wat){
-  return <div key={wat}>
+processData(item){
+  return <div key={item.objectId} className='todoItems'>
             <h1>{item.title}</h1><button onClick={()=>this.completeTask(item.objectId)}>Done</button>
          </div>   
 
@@ -61,12 +69,11 @@ processData(item, wat){
 
   render() {
     return (
-      <ul>
+      <ul className= 'todoList'>
         <input type='text' onChange={this.updateMessage} 
-             className='newTodo' value={this.state.message}/>
+             className='newTodo' value={this.state.message} onClick={this.wasClicked}/>
              <button onClick={this.addTodo}>Add</button>
         <TodoList hamster={this.props.scrub.map(this.processData)}/>
-        <h1>Hey</h1>
       </ul>
     );
   }
