@@ -42,18 +42,19 @@ export default React.createClass({
               location.reload(true);
         })
 },
-completeTask(x){
+completeTask(x, y){
     let todos = new TodoCollection();
     todos.fetch().then(()=>{
       var now = moment().toString();
          let CompletedTodo = new TodoModel({
             objectId: x,
+            title: y+ ' --finished!',
             completeAt: now
          });
          
          CompletedTodo.save();
          todos.fetch().then(()=>{
-          location.reload(true);
+         location.reload(true);
          })
 
       });
@@ -62,8 +63,8 @@ completeTask(x){
 
 processData(item){
   
-  return <div key={item.objectId} className='todoItems'>
-            <h1>{item.title}</h1><button onClick={()=>this.completeTask(item.objectId)}>Done</button>
+  return <div key={item.objectId} className='todoItems' id='{item.objectId}'>
+            <h1>{item.title}</h1><button onClick={()=>this.completeTask(item.objectId, item.title)}>Done</button>
          </div>   
 
 
@@ -71,14 +72,16 @@ processData(item){
 clearCompleted(){
   let todos = new TodoCollection();
     todos.fetch().then(()=>{
-      let dumpster = todos.toJSON().find(item=>item.completeAt);
+      let dumpster = todos.toJSON().filter(item=>item.completeAt);
+      _.each(dumpster, function(y){
       let CompletedTodo = new TodoModel({
-            objectId: dumpster.objectId,
+            objectId: y.objectId,
          });
         CompletedTodo.destroy();
         todos.fetch().then(()=>{
           location.reload(true);
          })
+      })
     })
 },
   render() {

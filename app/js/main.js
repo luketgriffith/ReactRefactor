@@ -158,12 +158,13 @@ exports['default'] = _react2['default'].createClass({
       location.reload(true);
     });
   },
-  completeTask: function completeTask(x) {
+  completeTask: function completeTask(x, y) {
     var todos = new _resources.TodoCollection();
     todos.fetch().then(function () {
       var now = (0, _moment2['default'])().toString();
       var CompletedTodo = new _resourcesNew_model2['default']({
         objectId: x,
+        title: y + ' --finished!',
         completeAt: now
       });
 
@@ -179,7 +180,7 @@ exports['default'] = _react2['default'].createClass({
 
     return _react2['default'].createElement(
       'div',
-      { key: item.objectId, className: 'todoItems' },
+      { key: item.objectId, className: 'todoItems', id: '{item.objectId}' },
       _react2['default'].createElement(
         'h1',
         null,
@@ -188,7 +189,7 @@ exports['default'] = _react2['default'].createClass({
       _react2['default'].createElement(
         'button',
         { onClick: function () {
-            return _this.completeTask(item.objectId);
+            return _this.completeTask(item.objectId, item.title);
           } },
         'Done'
       )
@@ -197,15 +198,17 @@ exports['default'] = _react2['default'].createClass({
   clearCompleted: function clearCompleted() {
     var todos = new _resources.TodoCollection();
     todos.fetch().then(function () {
-      var dumpster = todos.toJSON().find(function (item) {
+      var dumpster = todos.toJSON().filter(function (item) {
         return item.completeAt;
       });
-      var CompletedTodo = new _resourcesNew_model2['default']({
-        objectId: dumpster.objectId
-      });
-      CompletedTodo.destroy();
-      todos.fetch().then(function () {
-        location.reload(true);
+      _underscore2['default'].each(dumpster, function (y) {
+        var CompletedTodo = new _resourcesNew_model2['default']({
+          objectId: y.objectId
+        });
+        CompletedTodo.destroy();
+        todos.fetch().then(function () {
+          location.reload(true);
+        });
       });
     });
   },
