@@ -45,12 +45,13 @@ export default React.createClass({
 completeTask(x){
     let todos = new TodoCollection();
     todos.fetch().then(()=>{
-      
+      var now = moment().toString();
          let CompletedTodo = new TodoModel({
-            objectId: x
+            objectId: x,
+            completeAt: now
          });
          
-         CompletedTodo.destroy();
+         CompletedTodo.save();
          todos.fetch().then(()=>{
           location.reload(true);
          })
@@ -60,20 +61,35 @@ completeTask(x){
   },
 
 processData(item){
+  
   return <div key={item.objectId} className='todoItems'>
             <h1>{item.title}</h1><button onClick={()=>this.completeTask(item.objectId)}>Done</button>
          </div>   
 
 
 },
-
+clearCompleted(){
+  let todos = new TodoCollection();
+    todos.fetch().then(()=>{
+      let dumpster = todos.toJSON().find(item=>item.completeAt);
+      let CompletedTodo = new TodoModel({
+            objectId: dumpster.objectId,
+         });
+        CompletedTodo.destroy();
+        todos.fetch().then(()=>{
+          location.reload(true);
+         })
+    })
+},
   render() {
     return (
       <ul className= 'todoList'>
         <input type='text' onChange={this.updateMessage} 
              className='newTodo' value={this.state.message} onClick={this.wasClicked}/>
              <button onClick={this.addTodo}>Add</button>
+             
         <TodoList hamster={this.props.scrub.map(this.processData)}/>
+        <button onClick={this.clearCompleted}>Clear Completed</button>
       </ul>
     );
   }

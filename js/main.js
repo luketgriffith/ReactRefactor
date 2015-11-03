@@ -20,6 +20,7 @@ $.ajaxSetup({
 let todos = new TodoCollection();
      todos.fetch().then(()=>{
          let x= todos.toJSON();
+        
             ReactDom.render(<FullList 
                   scrub={x} />, 
                   document.querySelector('.wrapper'));

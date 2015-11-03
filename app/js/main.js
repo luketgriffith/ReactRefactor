@@ -53,6 +53,7 @@ _jquery2['default'].ajaxSetup({
 var todos = new _resources.TodoCollection();
 todos.fetch().then(function () {
   var x = todos.toJSON();
+
   _reactDom2['default'].render(_react2['default'].createElement(_reactFull_list2['default'], {
     scrub: x }), document.querySelector('.wrapper'));
 });
@@ -160,12 +161,13 @@ exports['default'] = _react2['default'].createClass({
   completeTask: function completeTask(x) {
     var todos = new _resources.TodoCollection();
     todos.fetch().then(function () {
-
+      var now = (0, _moment2['default'])().toString();
       var CompletedTodo = new _resourcesNew_model2['default']({
-        objectId: x
+        objectId: x,
+        completeAt: now
       });
 
-      CompletedTodo.destroy();
+      CompletedTodo.save();
       todos.fetch().then(function () {
         location.reload(true);
       });
@@ -192,7 +194,21 @@ exports['default'] = _react2['default'].createClass({
       )
     );
   },
-
+  clearCompleted: function clearCompleted() {
+    var todos = new _resources.TodoCollection();
+    todos.fetch().then(function () {
+      var dumpster = todos.toJSON().find(function (item) {
+        return item.completeAt;
+      });
+      var CompletedTodo = new _resourcesNew_model2['default']({
+        objectId: dumpster.objectId
+      });
+      CompletedTodo.destroy();
+      todos.fetch().then(function () {
+        location.reload(true);
+      });
+    });
+  },
   render: function render() {
     return _react2['default'].createElement(
       'ul',
@@ -204,7 +220,12 @@ exports['default'] = _react2['default'].createClass({
         { onClick: this.addTodo },
         'Add'
       ),
-      _react2['default'].createElement(_todo_list2['default'], { hamster: this.props.scrub.map(this.processData) })
+      _react2['default'].createElement(_todo_list2['default'], { hamster: this.props.scrub.map(this.processData) }),
+      _react2['default'].createElement(
+        'button',
+        { onClick: this.clearCompleted },
+        'Clear Completed'
+      )
     );
   }
 });
