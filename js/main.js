@@ -19,13 +19,11 @@ $.ajaxSetup({
 let todos = new TodoCollection();
      todos.fetch().then(()=>{
          let x= todos.toJSON();
-            _.each(x, function(y){
-                ReactDom.render(<FullList 
-                  getTitle={y.title} 
-                  getId={y.objectId}/>, 
+            ReactDom.render(<FullList 
+                  scrub={x} />, 
                   document.querySelector('.wrapper'));
               });
-          }); 
+        
 
 
 

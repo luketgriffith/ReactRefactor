@@ -52,11 +52,8 @@ _jquery2['default'].ajaxSetup({
 var todos = new _resources.TodoCollection();
 todos.fetch().then(function () {
   var x = todos.toJSON();
-  _underscore2['default'].each(x, function (y) {
-    _reactDom2['default'].render(_react2['default'].createElement(_reactFull_list2['default'], {
-      getTitle: y.title,
-      getId: y.objectId }), document.querySelector('.wrapper'));
-  });
+  _reactDom2['default'].render(_react2['default'].createElement(_reactFull_list2['default'], {
+    scrub: x }), document.querySelector('.wrapper'));
 });
 
 console.log('Hello, World');
@@ -156,6 +153,38 @@ exports['default'] = _react2['default'].createClass({
       location.reload(true);
     });
   },
+  completeTask: function completeTask(x) {
+    var todos = new _resources.TodoCollection();
+    todos.fetch().then(function () {
+      var CompletedTodo = new _resourcesNew_model2['default']({
+        objectId: x
+      });
+      console.log(CompletedTodo);
+      CompletedTodo.destroy();
+    });
+  },
+
+  processData: function processData(item, wat) {
+    var _this = this;
+
+    return _react2['default'].createElement(
+      'div',
+      { key: wat },
+      _react2['default'].createElement(
+        'h1',
+        null,
+        item.title
+      ),
+      _react2['default'].createElement(
+        'button',
+        { onClick: function () {
+            return _this.completeTask(item.objectId);
+          } },
+        'Done'
+      )
+    );
+  },
+
   render: function render() {
     return _react2['default'].createElement(
       'ul',
@@ -167,7 +196,7 @@ exports['default'] = _react2['default'].createClass({
         { onClick: this.addTodo },
         'Add'
       ),
-      _react2['default'].createElement(_todo_list2['default'], { hamster: this.props.getTitle, gerbil: this.props.getId }),
+      _react2['default'].createElement(_todo_list2['default'], { hamster: this.props.scrub.map(this.processData) }),
       _react2['default'].createElement(
         'h1',
         null,
@@ -236,32 +265,11 @@ var _resourcesNew_model2 = _interopRequireDefault(_resourcesNew_model);
 exports['default'] = _react2['default'].createClass({
   displayName: 'todo_list',
 
-  completeTask: function completeTask(x) {
-    var todos = new _resources.TodoCollection();
-    todos.fetch().then(function () {
-      var CompletedTodo = new _resourcesNew_model2['default']({
-        objectId: x
-      });
-      console.log(CompletedTodo);
-      CompletedTodo.destroy();
-      location.reload(true);
-    });
-  },
-
   render: function render() {
-    var _this = this;
-
     return _react2['default'].createElement(
       'li',
       null,
-      this.props.hamster,
-      _react2['default'].createElement(
-        'button',
-        { onClick: function () {
-            return _this.completeTask(_this.props.gerbil);
-          } },
-        'Done'
-      )
+      this.props.hamster
     );
   }
 
